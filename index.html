@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Quotes Generator by Jayashree</title>
+        <link href="https://fonts.googleapis.com/css?family=Abril+Fatface" rel="stylesheet">
+        <link rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.4.1/css/bootstrap.min.css">
+        <style>
+            body {
+                background-image: url(https://i.dailymail.co.uk/1s/2019/07/22/09/16337590-0-image-a-10_1563785527805.jpg);
+                background-size: cover;
+                background-position: center top;
+                background-repeat: no-repeat;
+                min-height: 100vh;
+            }
+
+            .container {
+                display: flex;
+                justify-content: center;
+            }
+
+            #outputWrap {
+                display: flex;
+                justify-content: center;
+                min-height: calc(100vh - 38px);
+                align-items: center;
+            }
+
+            #output {
+                background: #B7C8FF;
+                padding: 15px;
+                background-color: rgba(255, 255, 255, .8);
+                display: flex;
+                justify-content: center;
+            }
+
+            #likawat {
+                width: 100%;
+                max-width: 600px;
+                font-family: 'Abril Fatface', cursive;
+                position: relative;
+                line-height: 1;
+                margin: 0;
+                border: 2px solid #e74848;
+                padding: 25px;
+            }
+
+            #likawat h2 {
+                font-size: 2.5rem;
+                line-height: 1.2;
+                font-weight: normal;
+                margin-bottom: 15px;
+            }
+
+            #likawat p {
+                color: #e74848;
+                font-size: 1.5rem;
+                margin-bottom: 0;
+            }
+
+            @media (max-width: 700px) {
+                #output {
+                    padding: 5px;
+                }
+
+                #likawat {
+                    padding: 15px;
+                }
+
+                #likawat h2 {
+                    font-size: 1.5rem;
+                    line-height: 1.1;
+                }
+            }
+
+            .btn {
+                margin-top: 15px;
+            }
+        </style>
+    </head>
+
+    <body>
+        <div class='container'>
+            <button id='btn' class='btn btn-success'>Get a Quote</button>
+        </div>
+        <div id="outputWrap">
+            <div id="output">
+                <div id="likawat"></div>
+            </div>
+        </div>
+        <script>
+            let btn = document.getElementById('btn')
+            let output = document.getElementById('output')
+            let likawat = document.getElementById('likawat')
+
+            btn.addEventListener('click', function (e) {
+                fetch('https://quote-garden.herokuapp.com/api/v3/quotes/random')
+                    .then(res => res.json())
+                    .then(x => {
+                        let quote = x.data[0]
+                        likawat.innerHTML = `
+                    <h2>${quote.quoteText}</h2>
+                    <p> - ${quote.quoteAuthor === '' ? 'Unknown' : quote.quoteAuthor} </p>
+                    `
+                    })
+
+                function myFunction(y) {
+                    fetch(`https://source.unsplash.com/random/${y.matches ? '1080x1920' : '1920x1080'}`)
+                        .then(res => res.url)
+                        .then(x => {
+                            console.log(x)
+                            document.body.style.backgroundImage = `url(${x})`
+                        })
+                }
+
+                var y = window.matchMedia("(max-width: 700px)")
+                myFunction(y)
+                y.addListener(myFunction)
+            })
+
+            window.addEventListener('DOMContentLoaded', function (e) {
+                likawat.innerHTML = `<h2>Hello There. Your quotes for today are ready.</h2>
+            <p>Click to fetch them.</p>`
+            })
+        </script>
+    </body>
+
+</html>
